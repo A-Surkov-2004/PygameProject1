@@ -39,7 +39,7 @@ class Game:
     def __init__(self):
         self.width = WINDOW_WIDTH
         self.height = WINDOW_HEIGHT
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
         self.running = True
 
         self.lvl_timer = 5_400 # кадров
