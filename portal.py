@@ -8,7 +8,7 @@ class Portal(Sprite):
     portals = {}
     cds = {}
     CD = 0.5
-    def __init__(self,game, key):
+    def __init__(self,game, key, pos):
         super().__init__()
 
         if key in Portal.portals:
@@ -23,11 +23,11 @@ class Portal(Sprite):
         self.index = len(Portal.portals[key])-1
         self.image = pygame.image.load('images/portal.bmp')
         self.rect = self.image.get_rect()
-        self.rect.x = random.random() * game.width % (game.width - self.rect.width)
-        self.rect.y = random.random() * game.height % (game.width - self.rect.height)
+        self.rect.centerx = pos[0]
+        self.rect.centery = pos[1]
 
 
-    def activate(self):
+    def activate(self, player):
 
         if Portal.cds[self.key] < time.time():
 
@@ -39,8 +39,8 @@ class Portal(Sprite):
 
             aportal = Portal.portals[self.key][aindex]
 
-            self.game.player.rect.x = aportal.rect.x
-            self.game.player.rect.y = aportal.rect.y
+            player.rect.x = aportal.rect.x
+            player.rect.y = aportal.rect.y
 
         Portal.cds[self.key] = time.time() + Portal.CD
 
