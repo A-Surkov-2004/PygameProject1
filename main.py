@@ -32,6 +32,11 @@ clock = pygame.time.Clock()
 WINDOW_WIDTH = 1920
 WINDOW_HEIGHT = 1080
 
+coin_sound = pygame.mixer.Sound('sounds/coin2.wav')
+win_sound = pygame.mixer.Sound('sounds/powerup.wav')
+music = pygame.mixer.Sound('sounds/cannontube.ogg')
+music.set_volume(0.5)
+
 
 
 class Game:
@@ -41,6 +46,8 @@ class Game:
         self.height = WINDOW_HEIGHT
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
         self.running = True
+        self.music_on = True
+        music.play(100)
 
         self.lvl_timer = 5_400 # кадров
 
@@ -65,9 +72,9 @@ class Game:
         self.mapreader.image2list()
         self.mapreader.generate_map()
 
-        portal1 = portal.Portal(self, 'p1', (400, 1080/2-20))
+        portal1 = portal.Portal(self, 'p1', (400, self.height/2-20))
         self.portals.add(portal1)
-        portal2 = portal.Portal(self, 'p1', (1920-450, 1080/2-20))
+        portal2 = portal.Portal(self, 'p1', (self.width-450, self.height/2-20))
         self.portals.add(portal2)
 
         coin1 = coin.Coin(self)
@@ -128,6 +135,8 @@ class Game:
 
             self.draw()
 
+        win_sound.play()
+
         while True:
             self.end_game()
             self.check_events()
@@ -135,6 +144,7 @@ class Game:
 
 
     def end_game(self):
+
         if game.mode == 'coin_race':
             if self.players.sprites()[0].coins > self.players.sprites()[1].coins:
                 rect = self.coins_green_win.get_rect()
@@ -155,6 +165,7 @@ class Game:
         collisions = pygame.sprite.groupcollide(self.players, self.coins, False, True)
         if len(collisions) != 0:
             list(collisions.keys())[0].coins += 1
+            coin_sound.play()
             coin1 = coin.Coin(self)
 
             self.coins.add(coin1)
@@ -183,8 +194,14 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
+                    if self.music_on:
+                        self.music_on = False
+                        music.stop()
+                    else:
+                        self.music_on = True
+                        music.play(100)
 
     def draw(self):
             # Рендеринг объектов

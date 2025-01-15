@@ -125,7 +125,6 @@ class Player(Sprite):
     def control(self):
         if self.death_timer > 0:
             self.death_timer -= 1
-            print(self.death_timer)
             if self.death_timer == 0:
                 self.respawn()
         self.check_wallclip()

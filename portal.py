@@ -8,6 +8,9 @@ class Portal(Sprite):
     portals = {}
     cds = {}
     CD = 0.5
+
+    portal_sound = pygame.mixer.Sound('sounds/portal.wav')
+
     def __init__(self,game, key, pos):
         super().__init__()
 
@@ -30,12 +33,9 @@ class Portal(Sprite):
     def activate(self, player):
 
         if Portal.cds[self.key] < time.time():
+            Portal.portal_sound.play()
 
-
-
-            aindex = self.index
-            while aindex == self.index:
-                aindex = round(random.random() * len(Portal.portals[self.key])- 1)
+            aindex = (self.index+1)%len(Portal.portals[self.key])
 
             aportal = Portal.portals[self.key][aindex]
 
